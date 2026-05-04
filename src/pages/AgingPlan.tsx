@@ -11,9 +11,6 @@ import {
 } from 'recharts'
 import {
   ArrowLeft,
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
   ShoppingCart,
   CalendarDays,
   Info,
@@ -103,7 +100,7 @@ export default function AgingPlan() {
       </div>
 
       {/* Pipeline summary */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
           <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Active Batches</p>
           <p className="text-2xl font-bold text-white">5</p>
@@ -138,10 +135,10 @@ export default function AgingPlan() {
             const cfg = statusConfig[batch.status]
             const pct = Math.round((batch.daysAged / 21) * 100)
             return (
-              <div key={batch.id} className="px-5 py-4 hover:bg-gray-800/30 transition-colors">
-                <div className="flex items-start gap-4">
+              <div key={batch.id} className="px-4 md:px-5 py-4 hover:bg-gray-800/30 transition-colors">
+                <div className="flex items-start gap-3">
                   {/* Batch label + status */}
-                  <div className="flex-shrink-0 w-24">
+                  <div className="flex-shrink-0 w-20 md:w-24">
                     <p className="text-sm font-semibold text-white">{batch.batchLabel}</p>
                     <span className={`inline-flex text-xs px-2 py-0.5 rounded-full font-medium mt-1 ${cfg.color} ${cfg.bg} border ${cfg.border}`}>
                       {cfg.label}
@@ -150,11 +147,11 @@ export default function AgingPlan() {
 
                   {/* Progress bar + details */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs text-gray-400">
-                        Started {batch.startDate} → Ready {batch.readyDate}
+                    <div className="flex items-center justify-between mb-1.5 gap-2">
+                      <span className="text-xs text-gray-400 truncate">
+                        {batch.startDate} → {batch.readyDate}
                       </span>
-                      <span className="text-xs font-medium text-white">{batch.daysAged} / 21 days</span>
+                      <span className="text-xs font-medium text-white flex-shrink-0">{batch.daysAged}/21d</span>
                     </div>
                     <div className="h-2 bg-gray-800 rounded-full overflow-hidden mb-2">
                       <div
@@ -162,25 +159,17 @@ export default function AgingPlan() {
                         style={{ width: `${pct}%`, backgroundColor: cfg.bar }}
                       />
                     </div>
-                    <p className="text-xs text-gray-500">{batch.notes}</p>
-                  </div>
-
-                  {/* Stats */}
-                  <div className="flex-shrink-0 text-right">
-                    <p className="text-sm font-semibold text-white">{batch.roastCount} roasts</p>
-                    <p className="text-xs text-gray-400">{batch.rawWeightLbs} lbs raw</p>
-                    <p className="text-xs text-gray-500">→ ~{batch.projectedYieldLbs} lbs aged</p>
-                  </div>
-
-                  {/* Target service */}
-                  <div className="flex-shrink-0 w-44 text-right">
-                    <div className="flex items-center gap-1.5 justify-end">
-                      <CalendarDays className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" />
-                      <p className="text-xs text-gray-400">{batch.targetService}</p>
+                    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+                      <p className="text-xs text-gray-500 truncate">{batch.notes}</p>
+                      <div className="flex items-center gap-3 flex-shrink-0">
+                        <p className="text-xs font-semibold text-white">{batch.roastCount} roasts</p>
+                        <div className="flex items-center gap-1 text-xs text-gray-400">
+                          <CalendarDays className="w-3 h-3 text-gray-500" />
+                          <span className="hidden sm:inline">{batch.targetService}</span>
+                          {batch.daysRemaining > 0 && <span className="text-gray-600">· {batch.daysRemaining}d left</span>}
+                        </div>
+                      </div>
                     </div>
-                    {batch.daysRemaining > 0 && (
-                      <p className="text-xs text-gray-600 mt-0.5">{batch.daysRemaining} days remaining</p>
-                    )}
                   </div>
                 </div>
               </div>
@@ -236,8 +225,8 @@ export default function AgingPlan() {
         </div>
 
         {/* Day-by-day table (condensed) */}
-        <div className="border-t border-gray-800">
-          <div className="grid px-5 py-2 border-b border-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider" style={{ gridTemplateColumns: '100px 60px 1fr 100px 140px' }}>
+        <div className="border-t border-gray-800 overflow-x-auto">
+          <div className="grid px-5 py-2 border-b border-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider" style={{ gridTemplateColumns: '100px 60px 1fr 100px 140px', minWidth: '480px' }}>
             <div>Date</div>
             <div className="text-center">Covers</div>
             <div className="text-center">Roasts</div>
@@ -249,7 +238,7 @@ export default function AgingPlan() {
               <div
                 key={day.date}
                 className={`grid px-5 py-2.5 items-center text-sm ${day.isToday ? 'bg-brand-500/5' : 'hover:bg-gray-800/30'} transition-colors`}
-                style={{ gridTemplateColumns: '100px 60px 1fr 100px 140px' }}
+                style={{ gridTemplateColumns: '100px 60px 1fr 100px 140px', minWidth: '480px' }}
               >
                 <div>
                   <span className={`font-medium ${day.isToday ? 'text-brand-400' : day.isHoliday ? 'text-amber-300' : 'text-gray-200'}`}>
@@ -281,7 +270,7 @@ export default function AgingPlan() {
       </div>
 
       {/* Moisture loss explainer */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="w-4 h-4 text-brand-400" />

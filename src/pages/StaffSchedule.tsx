@@ -199,7 +199,7 @@ export default function StaffSchedule() {
       )}
 
       {/* Summary cards */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
           <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Today's Attendance</p>
           <p className="text-2xl font-bold text-white">{presentToday} / {scheduledToday}</p>
@@ -238,10 +238,10 @@ export default function StaffSchedule() {
       </div>
 
       {/* Schedule grid */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+      <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-x-auto">
         <div
           className="grid border-b border-gray-800"
-          style={{ gridTemplateColumns: '220px repeat(7, 1fr)' }}
+          style={{ gridTemplateColumns: '220px repeat(7, minmax(80px, 1fr))', minWidth: '700px' }}
         >
           <div className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Employee</div>
           {weekDays.map((day) => (
@@ -256,7 +256,7 @@ export default function StaffSchedule() {
             <div
               key={member.id}
               className="grid items-center hover:bg-gray-800/30 transition-colors"
-              style={{ gridTemplateColumns: '220px repeat(7, 1fr)' }}
+              style={{ gridTemplateColumns: '220px repeat(7, minmax(80px, 1fr))', minWidth: '700px' }}
             >
               <div className="px-4 py-3 flex items-center gap-3">
                 <div className={`w-7 h-7 rounded-full ${deptBg[member.department]} flex items-center justify-center flex-shrink-0`}>

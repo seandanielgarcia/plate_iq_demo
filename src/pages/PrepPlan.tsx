@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { ChefHat, TrendingUp, AlertTriangle, CheckCircle2, Filter, ArrowLeft, DollarSign } from 'lucide-react'
+import { ChefHat, TrendingUp, AlertTriangle, CheckCircle2, Filter, ArrowLeft } from 'lucide-react'
 import { prepItems } from '../data/mockData'
 
 type FilterType = 'all' | 'low' | 'over' | 'on-track'
@@ -93,7 +93,7 @@ export default function PrepPlan() {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <button
           onClick={() => handleFilterChange('on-track')}
           className={`rounded-xl border p-4 text-left transition-all ${filter === 'on-track' ? 'ring-2 ring-emerald-500/40' : 'hover:border-emerald-500/30'} bg-emerald-500/10 border-emerald-500/20`}
@@ -128,8 +128,8 @@ export default function PrepPlan() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-1 bg-gray-900 border border-gray-800 rounded-lg p-1">
+      <div className="overflow-x-auto pb-1">
+        <div className="flex items-center gap-1 bg-gray-900 border border-gray-800 rounded-lg p-1 w-max">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -145,8 +145,8 @@ export default function PrepPlan() {
       </div>
 
       {/* Table */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
-        <div className="grid gap-4 px-5 py-3 border-b border-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider" style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 80px 1fr' }}>
+      <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-x-auto">
+        <div className="grid gap-4 px-5 py-3 border-b border-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider" style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 80px 1fr', minWidth: '640px' }}>
           <div>Item</div>
           <div>Category</div>
           <div className="text-right">Recommended</div>
@@ -160,7 +160,7 @@ export default function PrepPlan() {
             const cfg = statusConfig[item.status as keyof typeof statusConfig]
             const delta = item.prepped - item.recommended
             return (
-              <div key={item.id} className="grid gap-4 px-5 py-4 items-center hover:bg-gray-800/50 transition-colors" style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 80px 1fr' }}>
+              <div key={item.id} className="grid gap-4 px-5 py-4 items-center hover:bg-gray-800/50 transition-colors" style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 80px 1fr', minWidth: '640px' }}>
                 <div>
                   <p className="text-sm font-medium text-gray-100">{item.name}</p>
                   <p className="text-xs text-gray-500 mt-0.5">{item.reason}</p>

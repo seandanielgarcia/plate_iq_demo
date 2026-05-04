@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, ChevronDown, ArrowRight, X, AlertTriangle, Info, CheckCircle2 } from 'lucide-react'
+import { Bell, ChevronDown, ArrowRight, X, AlertTriangle, Info, CheckCircle2, Menu } from 'lucide-react'
 import { restaurant, alerts } from '../data/mockData'
 
 const alertIcons = {
@@ -9,7 +9,11 @@ const alertIcons = {
   success: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />,
 }
 
-export default function Header() {
+interface HeaderProps {
+  onMenuClick: () => void
+}
+
+export default function Header({ onMenuClick }: HeaderProps) {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [dismissedIds, setDismissedIds] = useState<number[]>([])
@@ -26,14 +30,21 @@ export default function Header() {
   const dismiss = (id: number) => setDismissedIds((prev) => [...prev, id])
 
   return (
-    <header className="h-16 flex items-center justify-between px-6 bg-gray-900 border-b border-gray-800 flex-shrink-0">
-      <div>
-        <h1 className="text-sm font-semibold text-white">{restaurant.name}</h1>
-        <p className="text-xs text-gray-400">{today} · {restaurant.location} · {restaurant.seats} seats</p>
+    <header className="h-16 flex items-center justify-between px-4 md:px-6 bg-gray-900 border-b border-gray-800 flex-shrink-0">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden p-2 rounded-lg text-gray-400 hover:text-gray-200 hover:bg-gray-800 transition-colors"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        <div>
+          <h1 className="text-sm font-semibold text-white leading-tight">{restaurant.name}</h1>
+          <p className="text-xs text-gray-400 hidden sm:block">{today} · {restaurant.location} · {restaurant.seats} seats</p>
+        </div>
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Notification bell */}
         <div className="relative">
           <button
             onClick={() => setOpen((v) => !v)}
@@ -49,11 +60,8 @@ export default function Header() {
 
           {open && (
             <>
-              {/* Click-outside backdrop */}
               <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-
-              {/* Dropdown panel */}
-              <div className="absolute right-0 top-full mt-2 w-96 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-20 overflow-hidden">
+              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-20 overflow-hidden">
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
                   <span className="text-sm font-semibold text-white">Notifications</span>
                   {dismissedIds.length > 0 && (
@@ -107,7 +115,7 @@ export default function Header() {
           <div className="w-7 h-7 rounded-full bg-brand-500/20 flex items-center justify-center">
             <span className="text-xs font-medium text-brand-400">{restaurant.managerInitials}</span>
           </div>
-          <span className="text-sm text-gray-300">{restaurant.manager}</span>
+          <span className="text-sm text-gray-300 hidden sm:block">{restaurant.manager}</span>
           <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
         </button>
       </div>
